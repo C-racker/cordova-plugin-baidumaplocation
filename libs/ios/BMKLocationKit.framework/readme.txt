@@ -1,8 +1,8 @@
 1、版本：
-    百度地图iOS定位SDK v1.4
+    百度地图iOS定位SDK v1.8
 
 2、是否带IDFA：
-    是
+    无
 
 3、是否为Bitcode：
     否

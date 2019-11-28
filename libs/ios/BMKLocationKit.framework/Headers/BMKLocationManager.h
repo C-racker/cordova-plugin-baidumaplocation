@@ -109,7 +109,7 @@ typedef void (^BMKLocatingCompletionBlock)(BMKLocation * _Nullable location, BMK
 
 
 ///开发者可以指定该用户的id，用于后续统一识别用户，便于查找问题
-@property(nonatomic, retain, nullable) NSString * userID;
+@property(nonatomic, copy, nullable) NSString * userID;
 
 
 /**
@@ -153,6 +153,16 @@ typedef void (^BMKLocatingCompletionBlock)(BMKLocation * _Nullable location, BMK
  */
 - (void)stopUpdatingHeading;
 
+/**
+ * @brief 该方法为BMKLocationManager尝试使用高精度室内定位。在特定的室内场景下会有更高精度的定位回调，只在室内定位版本生效。
+ */
+- (void)tryIndoorLocation;
+
+/**
+ * @brief 该方法为BMKLocationManager会关闭高精度室内定位，只在室内定位版本生效。
+ */
+- (void)stopIndoorLocation;
+
 
 /**
  *  @brief 转换为百度经纬度的坐标
@@ -181,6 +191,14 @@ typedef void (^BMKLocatingCompletionBlock)(BMKLocation * _Nullable location, BMK
 @protocol BMKLocationManagerDelegate <NSObject>
 
 @optional
+
+/**
+ *  @brief 为了适配app store关于新的后台定位的审核机制（app store要求如果开发者只配置了使用期间定位，则代码中不能出现申请后台定位的逻辑），当开发者在plist配置NSLocationAlwaysUsageDescription或者NSLocationAlwaysAndWhenInUseUsageDescription时，需要在该delegate中调用后台定位api：[locationManager requestAlwaysAuthorization]。开发者如果只配置了NSLocationWhenInUseUsageDescription，且只有使用期间的定位需求，则无需在delegate中实现逻辑。
+ *  @param manager 定位 BMKLocationManager 类。
+ *  @param locationManager 系统 CLLocationManager 类 。
+ *  @since 1.6.0
+ */
+- (void)BMKLocationManager:(BMKLocationManager * _Nonnull)manager doRequestAlwaysAuthorization:(CLLocationManager * _Nonnull)locationManager;
 
 /**
  *  @brief 当定位发生错误时，会调用代理的此方法。
